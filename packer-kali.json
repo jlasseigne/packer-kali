@@ -1,0 +1,37 @@
+{
+  "variables": {
+    "accelerator": "tcg",
+    "username": "root",
+    "password": "toor",
+    "kernel_file": "./kernel-qemu-4.19.50-buster",
+    "versatile_pb_file": "./versatile-pb.dtb"
+  },
+  "builders": [
+    {
+      "name": "rpi",
+      "type": "qemu",
+      "qemu_binary": "qemu-system-arm",
+      "accelerator": "{{ user `accelerator` }}",
+      "iso_url": "https://images.offensive-security.com/arm-images/kali-linux-2019.2-rpi.img.xz",
+      "iso_checksum_type": "sha256",
+      "iso_checksum_url": "https://images.offensive-security.com/arm-images/SHA256SUMS",
+      "iso_target_extension": "img",
+      "format": "raw",
+      "boot_wait": "1m",
+      "ssh_username": "{{ user `username` }}",
+      "ssh_password": "{{ user `password` }}",
+      "ssh_timeout": "10m",
+      "machine_type": "versatilepb",
+      "disk_image": "true",
+      "use_default_display": "true",
+      "qemuargs": [
+        ["-m", "256m"],
+        ["-cpu", "arm1176"],
+        ["-append", "root=/dev/vda2 rootfstype=ext4 rw"],
+        ["-no-reboot"],
+        ["-kernel", "{{ user `kernel_file` }}"],
+        ["-dtb", "{{ user `versatile_pb_file` }}"]
+      ]
+    }
+  ]
+}
